@@ -1,0 +1,66 @@
+{% extends 'backend_api/base.html' %}
+{% load static %}
+{% block content%}
+<div class="row column4 graph">
+    <!-- tab style 1 -->
+    <div class="col-md-12">
+       <div class="white_shd full margin_bottom_30">
+          <div class="full graph_head">
+             <div class="heading1 margin_0">
+                <h2>Bodis.com</h2>
+             </div>
+             
+          </div>
+					<div class="full graph_head">
+                  <form method="post" action="{% url 'ukraine' %}">
+                     <label for="API_token">API токен для Ukraine.com.ua</label><br />
+                            {% csrf_token %}
+                       {% if api_token_ukraine %}
+                               <input placeholder="Введите API токен" name="API_token" type="password" value="{{ api_token_ukraine }}" style="width: 30%" />
+                       {% else %}
+                       <input placeholder="Введите API токен" name="API_token" type="password" style="width: 30%"/>
+                       {% endif %}
+                     <button type="submit" class="btn cur-p btn-success">Сохранить</button>
+                  </form>
+					</div>
+          
+          <div class="full inner_elements">
+             <div class="row">
+                <div class="col-md-12">
+                   <div class="tab_style2">
+                      <div class="tabbar padding_infor_info">
+                         <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                               <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Домены</a>
+                               <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Другие задания</a>
+                               <!-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> -->
+                            </div>
+                         </nav>
+                         <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                               <div id="bodis_domains"></div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                               <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et 
+                                  quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos 
+                                  qui ratione voluptatem sequi nesciunt.
+                               </p>
+                            </div>
+                            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                               <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et 
+                                  quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos 
+                                  qui ratione voluptatem sequi nesciunt.
+                               </p>
+                            </div>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <script src="{% static '/backend_api/js/BodisDomainsAdd.js' %}" type="text/babel"></script>
+ {% endblock %}
+

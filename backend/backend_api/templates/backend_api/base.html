@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Pluto - Responsive Bootstrap Admin Panel Templates</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- site icon -->
+      <link rel="icon" href="" type="image/png" />
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="{% static 'backend_api/css/bootstrap.min.css' %}" />
+      <!-- site css -->
+      <link rel="stylesheet" href="{% static 'backend_api/style.css' %}" />
+      <!-- responsive css -->
+      <link rel="stylesheet" href="{% static 'backend_api/css/responsive.css' %}" />
+      <!-- color css -->
+      <!-- <link rel="stylesheet" href="{% static 'backend_api/css/colors.css' %}" /> -->
+      <!-- select bootstrap -->
+      <link rel="stylesheet" href="{% static 'backend_api/css/bootstrap-select.css' %}" />
+      <!-- scrollbar css -->
+      <link rel="stylesheet" href="{% static 'backend_api/css/perfect-scrollbar.css' %}" />
+      <!-- custom css -->
+      <link rel="stylesheet" href="{% static 'backend_api/css/custom.css' %}" />
+      <!-- <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+      <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+      <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> -->
+      <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script> 
+      <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script> 
+      <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <body class="dashboard dashboard_1">
+      <div class="full_container">
+         <div class="inner_container">
+            <!-- Sidebar  -->
+            <nav id="sidebar">
+               <div class="sidebar_blog_1">
+                  <div class="sidebar-header">
+                     <div class="logo_section">
+                        <a href="index.html"><img class="logo_icon img-responsive" src="{% static 'backend_api/images/logo/logo_icon.png' %}" alt="#" /></a>
+                     </div>
+                  </div>
+                  <div class="sidebar_user_info">
+                     <div class="icon_setting"></div>
+                     <div class="user_profle_side">
+                        <div class="user_img"><img class="img-responsive" src="{% static 'backend_api/images/layout_img/user_img.jpg' %}" alt="#" /></div>
+                        <div class="user_info">
+                           {% if request.user.is_authenticated %}
+                           <h6>{{ user.username }}</h6>
+                           <p><span class="online_animation"></span> Online</p>
+                           {% else %}
+                           <p>You don't login!</p>
+                           {% endif %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="sidebar_blog_2">
+                  <h4>Ресурсы</h4>
+                  <ul class="list-unstyled components">
+                     <li class="active">
+                        <a href="{% url 'ukraine' %}"><i class="fa fa-dashboard yellow_color"></i> <span>Ukraine.com.ua</span></a>
+                     </li>
+                     <li><a href="{% url 'bodis' %}"><i class="fa fa-clock-o orange_color"></i> <span>Bodis.com</span></a></li>
+                  </ul>
+               </div>
+            </nav>
+            <!-- end sidebar -->
+            <!-- right content -->
+            <div id="content">
+               <!-- topbar -->
+               <div class="topbar">
+                  <nav class="navbar navbar-expand-lg navbar-light">
+                     <div class="full">
+                        <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
+                        <div class="logo_section">
+                           <a href="index.html"><img class="img-responsive" src="{% static 'backend_api/images/logo/logo.png' %}" alt="#" /></a>
+                        </div>
+                        <div class="right_topbar">
+                           <div class="icon_info">
+                              <ul>
+                                 <li><a href="#"><i class="fa fa-bell-o"></i><span class="badge">2</span></a></li>
+                                 <li><a href="#"><i class="fa fa-question-circle"></i></a></li>
+                                 <li><a href="#"><i class="fa fa-envelope-o"></i><span class="badge">3</span></a></li>
+                              </ul>
+                              <ul class="user_profile_dd">
+                                 <li>
+                                    {% if request.user.is_authenticated %}
+                                    <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="{% static 'backend_api/images/layout_img/user_img.jpg' %}" alt="#" />
+                                       <span class="name_user">{{user.username}}</span>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                       <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                                       <a class="dropdown-item" href="{% url 'logout' %}"><span>Log Out</span> <i class="fa fa-sign-out"></i></a>
+                                    </div>
+                                    {% else %}
+                                    <a href="{% url 'index' %}">Login</a>
+                                    {% endif %}
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </nav>
+               </div>
+               <!-- end topbar -->
+               {% if request.user.is_authenticated %}
+                  {% block content%}
+                  {% endblock %}
+               {% else %}
+                  <br/><br/>
+                  <h2>You don't login!</h2>
+               {% endif %}
+               
+               <!-- end dashboard inner -->
+            
+            </div>   
+         </div>
+      <!-- jQuery -->
+      <script src="{% static 'backend_api/js/jquery.min.js' %}"></script>
+      <script src="{% static 'backend_api/js/popper.min.js' %}"></script>
+      <script src="{% static 'backend_api/js/bootstrap.min.js' %}"></script>
+      <!-- wow animation -->
+      <script src="{% static 'backend_api/js/animate.js' %}"></script>
+      <!-- select country -->
+      <script src="{% static 'backend_api/js/bootstrap-select.js' %}"></script>
+      <!-- owl carousel -->
+      <script src="{% static 'backend_api/js/owl.carousel.js' %}"></script> 
+      <!-- chart js -->
+      <script src="{% static 'backend_api/js/Chart.min.js' %}"></script>
+      <script src="{% static 'backend_api/js/Chart.bundle.min.js' %}"></script>
+      <script src="{% static 'backend_api/js/utils.js' %}"></script>
+      <script src="{% static 'backend_api/js/analyser.js' %}"></script>
+      <!-- nice scrollbar -->
+      <script src="{% static 'backend_api/js/perfect-scrollbar.min.js' %}"></script>
+      <script>
+         var ps = new PerfectScrollbar('#sidebar');
+      </script>
+      <!-- custom js -->
+      <script src="{% static 'backend_api/js/custom.js' %}"></script>
+      <script src="{% static 'backend_api/js/chart_custom_style1.js' %}"></script>
+      <!-- <script src="{% static 'backend_api/main.js' %}"></script> -->
+      <!-- <script src="{% static 'backend_api/index.js' %}"></script> -->
+   </body>
+</html>

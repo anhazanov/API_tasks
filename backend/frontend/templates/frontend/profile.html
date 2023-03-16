@@ -1,0 +1,25 @@
+{% extends 'backend_api/base.html' %}
+{% load static %}
+
+{% block content %} 
+
+<div class="row column4 graph">
+    <div class="col-md-12">
+        <form method="post">
+        {% csrf_token %} 
+        <div>{{ form.non_field_errors }}</div>
+        {% for f in form %}   
+        <div class="full graph_head">
+            <label for="API_token">{{ f.label }}</label><br />
+            {{ f }}
+            <div>{{ f.errors }}</div>
+        </div>
+        {% endfor %}
+        
+        <div class="full graph_head">
+            <button type="submit" class="btn cur-p btn-success">Сохранить</button>
+        </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
