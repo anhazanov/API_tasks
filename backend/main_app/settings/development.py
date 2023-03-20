@@ -7,7 +7,7 @@ dotenv_path = os.path.join(str(BASE_DIR).rsplit('/', 1)[0], 'env', 'development'
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-LOGIN_REDIRECT_URL = 'ukraine'
+LOGIN_REDIRECT_URL = 'profile'
 
 SECRET_KEY = os.getenv('DJANGO_DEVELOPMENT_SECRET_KEY')
 

@@ -1,19 +1,15 @@
-import os
-
 from django.views import View
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .utils import BaseUtils, ApiUtils
-from .serializer import ApiSerializer
+
 
 class UkrainePage(View, BaseUtils):
     context = {}
 
     def get(self, request):
-        if not self.context.get('api_token_ukraine'):
-            self.context['api_token_ukraine'] = self.read_api_token().get('api_token_ukraine')
         return render(request, 'backend_api/ukraine.html', context=self.context)
 
     def post(self, request):
@@ -28,9 +24,9 @@ class UkrainePage(View, BaseUtils):
             }
             headers = {'Content-Type': 'application/json',
                        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)",
-                'Authorization': 'Bearer ' + self.read_api_token().get("api_token_ukraine")}
+                       'Authorization': 'Bearer ' + self.read_api_token().get("api_token_ukraine")}
             response = ApiUtils.send_post_request('https://adm.tools/action/domain/expired/load',
-                                             params=params, headers=headers)
+                                                  params=params, headers=headers)
             print(response['response'].get('list')[0])
 
         return render(request, 'backend_api/ukraine.html', context=self.context)
@@ -40,7 +36,6 @@ class BodisPage(View, BaseUtils):
     context = {}
 
     def get(self, request):
-        self.context['api_token_bodis'] = self.read_api_token().get('api_token_ukraine')
         return render(request, 'backend_api/bodis.html', context=self.context)
 
     def post(self, request):
@@ -50,10 +45,10 @@ class BodisPage(View, BaseUtils):
         return render(request, 'backend_api/bodis.html', context=self.context)
 
 
-def headers_ukraine():
+def headers_ukraine(username: str):
     return {'Content-Type': 'application/json',
-           "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)",
-           'Authorization': 'Bearer ' + BaseUtils.read_api_token().get("api_token_ukraine")}
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)",
+            'Authorization': 'Bearer ' + BaseUtils.read_api_token(username).api_ukraine}
 
 
 class UkraineFreeDomains(APIView):
@@ -63,7 +58,7 @@ class UkraineFreeDomains(APIView):
             'by': 'desc',
             'sort': 'trust'
         }
-        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine())
+        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
         output = [
             {
                 'name': output.get('name'),
@@ -76,14 +71,21 @@ class UkraineFreeDomains(APIView):
 
 
 class UkraineCheckDomain(APIView):
-    def get(self, request):
-        return Response({})
+    # def get(self, request):
+    #     print(request.GET.get('domain'))
+    #     url = 'https://adm.tools/action/domain/check/'
+    #     params = {'domain': request.GET.get('domain')}
+    #     response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
+    #     print(response)
+    #     return Response("Домен свободен" if response and response.get('result') else 'Домен занят')
 
     def post(self, request):
+        print(request.data)
+        print(request.POST)
         url = 'https://adm.tools/action/domain/check/'
         params = {'domain': request.data.get('domain')}
-        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine())
-        return Response("Домен свободен" if response and response.get('result') else 'Домен занят' )
+        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
+        return Response("Домен свободен" if response and response.get('result') else 'Домен занят')
 
 
 class UkraineRegistrDomain(APIView):
@@ -94,7 +96,7 @@ class UkraineRegistrDomain(APIView):
         url = 'https://adm.tools/action/domain/register/'
         params = {'domain': request.data['registr'].get('domain'),
                   'period': request.data['registr'].get('period', 1)}
-        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine())
+        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
         if response.get('result'):
             return Response({
                 'domain': response['response']['domain'].get('name'),
@@ -107,7 +109,7 @@ class UkraineRegistrDomain(APIView):
 class UkraineGetInvoices(APIView):
     def get(self, request):
         url = 'https://adm.tools/action/billing/get_invoices/'
-        response = ApiUtils.send_get_request(url=url, headers=headers_ukraine())
+        response = ApiUtils.send_get_request(url=url, headers=headers_ukraine(request.user.username))
         return Response(response['response'].get('list') if response.get('result') else [])
 
 
@@ -118,7 +120,7 @@ class UkraineCancelInvoice(APIView):
     def post(self, request):
         url = 'https://adm.tools/action/billing/invoice_cancel/'
         params = {'invoice_id': request.data.get('id')}
-        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine())
+        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
         return Response(response.get('result'))
 
 
@@ -127,16 +129,16 @@ class UkraineInvoicePayBalance(APIView):
         url = 'https://adm.tools/action/billing/invoice_pay_from_balance/'
         params = {'invoice_id': int(request.data.get('id')),
                   "token": " "}
-                  # 'token': 'Bearer ' + BaseUtils.read_api_token().get("api_token_ukraine")}
-        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine())
+        # 'token': 'Bearer ' + BaseUtils.read_api_token().get("api_token_ukraine")}
+        response = ApiUtils.send_post_request(url=url, params=params, headers=headers_ukraine(request.user.username))
         print(response)
         return Response(response)
 
 
-def headers_bodis():
+def headers_bodis(username: str):
     return {'Content-Type': 'application/json',
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)",
-            'Authorization': 'Bearer ' + BaseUtils.read_api_token().get("api_token_bodis")}
+            'Authorization': 'Bearer ' + BaseUtils.read_api_token(username).api_bodis}
 
 
 class BodisAddDomains(APIView):

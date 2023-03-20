@@ -5,17 +5,16 @@
 
 <div class="row column4 graph">
     <div class="col-md-12">
-        <form method="post">
+        <form method="post" action="{% url 'profile' %}">
         {% csrf_token %} 
-        <div>{{ form.non_field_errors }}</div>
-        {% for f in form %}   
         <div class="full graph_head">
-            <label for="API_token">{{ f.label }}</label><br />
-            {{ f }}
-            <div>{{ f.errors }}</div>
+            <label for="API_token">API токен для Ukraine.com.ua</label><br />
+            <input placeholder="Введите API токен" value="{{ api_ukraine }}" name="api_ukraine" type="text" style="width: 40%" />
         </div>
-        {% endfor %}
-        
+        <div class="full graph_head">
+            <label for="API_token">API токен для  Bodis.com</label><br />
+            <input placeholder="Введите API токен" value="{{ api_bodis }}" name="api_bodis" type="text" style="width: 40%" />
+        </div>
         <div class="full graph_head">
             <button type="submit" class="btn cur-p btn-success">Сохранить</button>
         </div>

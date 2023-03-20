@@ -11,19 +11,6 @@
              </div>
              
           </div>
-					<div class="full graph_head">
-							<form method="post" action="{% url 'ukraine' %}">
-              <label for="API_token">API токен для Ukraine.com.ua</label><br />
-							{% csrf_token %}
-                {% if api_token_ukraine %}
-								<input placeholder="Введите API токен" name="API_token" type="password" value="{{ api_token_ukraine }}" style="width: 30%" />
-                {% else %}
-                <input placeholder="Введите API токен" name="API_token" type="password" style="width: 30%"/>
-                {% endif %}
-								<button type="submit" class="btn cur-p btn-success">Сохранить</button>
-							</form>
-					</div>
-          
           <div class="full inner_elements">
              <div class="row">
                 <div class="col-md-12">
@@ -39,6 +26,7 @@
                          </nav>
                          <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                              <div id="ukraine_domain_check"></div>
                               <div id="ukraine_domain_registration"></div>
                               <div id="ukraine_domain_invoices"></div>
                             </div>
@@ -66,7 +54,10 @@
        </div>
     </div>
  </div>
+ <!-- <script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script> -->
   <script src="{% static '/backend_api/js/UkrFreeDomains.js' %}" type="text/babel"></script>
   <script src="{% static '/backend_api/js/UkrDomainInvoices.js' %}" type="text/babel"></script>
-  <script src="{% static '/backend_api/js/UkrDomainRegistration.js' %}" type="text/babel"></script>
+  <script src="{% static '/backend_api/js/UkrCheckDomain.js' %}" type="text/babel"></script>
+  <script src="{% static '/backend_api/js/UkrRegistrDomain.js' %}" type="text/babel"></script>
+  <!-- <script src="{% static '/backend_api/js/UkrDomainRegistration.js' %}" type="text/babel"></script> -->
  {% endblock %}

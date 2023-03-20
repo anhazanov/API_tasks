@@ -1,14 +1,3 @@
-// class FreeDomain extends React.Component {
-//    render(){
-//     return (
-//         <h1>WE ARE THE CHAMPIONS!</h1>
-//         )
-//     }
-// }
-
-// ReactDOM.render(<FreeDomain/>, document.getElementById("ukraine_free_domains"))
-
-
 class UkraineFreeDomains extends React.Component {
     state = { details: []}
   

@@ -5,8 +5,11 @@ from django.views import View
 from django.conf import settings
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import LoginUserForm, RegisterUserForm, AddApiKeys
+from .forms import LoginUserForm, RegisterUserForm
+from .models import ApiKeys
 
 
 class RegisterPage(CreateView):
@@ -38,13 +41,20 @@ class ProfilePage(View):
     context = {}
 
     def get(self, request):
-        self.context['form'] = AddApiKeys()
+        try:
+            user_api = User.objects.get(username=request.user.username).apikeys
+            self.context['api_ukraine'] = user_api.api_ukraine
+            self.context['api_bodis'] = user_api.api_bodis
+        except ObjectDoesNotExist:
+            self.context['api_ukraine'] = ''
+            self.context['api_bodis'] = ''
         return render(request, 'frontend/profile.html', context=self.context)
 
     def post(self, request):
-        form = AddApiKeys(request.POST)
-        print(request.POST)
-        print(form)
-        # if form.is_valid():
-        #     form.save()
+        form = ApiKeys(
+            username=User.objects.get(id=request.user.id),
+            api_ukraine=request.POST.get('api_ukraine'),
+            api_bodis=request.POST.get('api_bodis'),
+        )
+        form.save()
         return redirect('profile')

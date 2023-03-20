@@ -1,5 +1,16 @@
 class UkraineDomainRegistration extends React.Component {
-    state = {check_domain: "", ch_domain: "", domain: "", period: "", pay_data: ""}
+    constructor (props) {
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        axios.defaults.xsrfCookieName = "csrftoken";
+        super(props);
+        this.state = {check_domain: "", ch_domain: "", domain: "", period: "", pay_data: ""};
+        this.sendPostCheckDomain = this.sendPostCheckDomain.bind(this);
+        this.sendPostRegistrDomain = this.sendPostRegistrDomain.bind(this);
+        this.handleChangeCheck = this.handleChangeCheck.bind(this);
+        this.handleChangeDomain = this.handleChangeDomain.bind(this);
+        this.handleChangePeriod = this.handleChangePeriod.bind(this);
+
+    }
 
     handleChangeCheck = event => {
         this.setState ({
@@ -24,13 +35,13 @@ class UkraineDomainRegistration extends React.Component {
         const ch_domain = this.state.ch_domain;
         axios.post("/tasks/api/check_domain/", {ch_domain})
         .then(res => {
-        data = res.data;
-        this.setState ({ check_domain: data })
-    })
-    .catch( err => {
-      console.log(err)
-    })
-    }
+            data = res.data;
+            this.setState ({ check_domain: data })
+            })
+        .catch( err => {
+            console.log(err)
+            })
+        }
 
     sendPostRegistrDomain = () => {
         let data_registr;
@@ -113,8 +124,8 @@ class UkraineDomainRegistration extends React.Component {
                     <input placeholder="Срок регистрации, лет" name="period" type="text" onChange={this.handleChangePeriod}/><br />
                     <button type="sumbit" class="btn cur-p btn-info" onClick={this.sendPostRegistrDomain}>Создать заказ на регистрацию</button><br />
                     <div class="table_section padding_infor_info">
-            {pay_content}
-        </div>
+                        {pay_content}
+                    </div>
                 </div>
             </div>
             

@@ -6,7 +6,6 @@ class UkraineDomainInvoices extends React.Component {
         axios.get("/tasks/api/get_invoices/")
         .then(res => {
             data = res.data;
-            console.log(data);
             this.setState({ invoices_list: data})
         })
         .catch( err => {
@@ -26,7 +25,6 @@ class UkraineDomainInvoices extends React.Component {
         axios.get("/tasks/api/get_invoices/")
         .then(res => {
             data = res.data;
-            console.log(data);
             this.setState({ invoices_list: data})
         })
         .catch( err => {
